@@ -34,6 +34,10 @@ class CustomerPhoneSchema(BaseModel):
     number: str = Field(pattern=r'^\+\d{8,15}$')
 
 
+class CustomerPhoneReadSchema(BaseModel):
+    number: str
+
+
 class CustomerAddressSchema(BaseModel):
     index: str | None = None
     country_iso: CountryIsoEnums | None = Field(default=None, serialization_alias='countryIso')
@@ -75,7 +79,7 @@ class CustomerReadSchema(BaseModel):
     birthday: date | None = None
     created_at: datetime = Field(validation_alias='createdAt')
 
-    phones: list[CustomerPhoneSchema] = []
+    phones: list[CustomerPhoneReadSchema] = []
     address: CustomerAddressReadSchema | None = None
 
 
