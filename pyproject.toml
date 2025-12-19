@@ -1,0 +1,125 @@
+[project]
+name = "integration-with-retailcrm"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi (==0.124.4)",
+    "httpx (==0.28.1)",
+    "pydantic (==2.12.5)",
+    "pydantic-settings (==2.12.0)",
+    "uvicorn (==0.38.0)",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.13"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "1.17.1"
+taskipy = "1.14.1"
+ruff = "0.12.10"
+isort = "6.0.1"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.taskipy.tasks]
+format-and-lint = "task isort && task ruff && task mypy-lint"
+
+isort = "isort src"
+ruff = "ruff format ./src/ && ruff check ./src/ --fix"
+mypy-lint = "mypy --install-types --non-interactive src/"
+
+[tool.isort]
+line_length=120
+multi_line_output=3
+force_grid_wrap=4
+include_trailing_comma=true
+use_parentheses=true
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ['site-packages', '*.pyi']
+target-version = 'py312'
+
+[tool.ruff.lint]
+fixable = ["ALL"]
+unfixable = []
+ignore = [
+    "B008", # do not perform function calls in argument defaults
+    "E501", # unfixable Line too long
+    "B010", # do not overwrite setattr
+]
+select = [
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # pyflakes
+    "I", # isort
+    "C", # flake8-comprehensions
+    "B", # flake8-bugbear
+    "UP", # pyupgrade
+]
+
+[tool.ruff.format]
+quote-style = 'single'
+indent-style = 'space'
+line-ending = 'auto'
+skip-magic-trailing-comma = false
+exclude = ['*.pyi']
+
+[tool.ruff.lint.mccabe]
+max-complexity = 6
+
+[tool.ruff.lint.pyupgrade]
+# Preserve types, even if a file imports `from __future__ import annotations`.
+keep-runtime-typing = true
+
+[tool.mypy]
+# Mypy configuration:
+# https://mypy.readthedocs.io/en/latest/config_file.html
+allow_redefinition = false
+check_untyped_defs = true
+disallow_untyped_decorators = false
+disallow_any_generics = false
+disallow_untyped_calls = false
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+ignore_errors = false
+ignore_missing_imports = false
+implicit_reexport = true
+local_partial_types = true
+strict_optional = true
+strict_equality = true
+no_implicit_optional = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unreachable = true
+warn_no_return = false
+pretty = true
+follow_imports = "silent"
+follow_imports_for_stubs = true
+show_error_codes = true
+plugins = [
+    "pydantic.mypy"
+]
+mypy_path = "src/"
+
+[tool.pydantic-mypy]
+init_forbid_extra = false
+init_typed = false
+warn_required_dynamic_aliases = false
+warn_untyped_fields = true
+
+[[tool.mypy.overrides]]
+module = "html.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "docker.*"
+ignore_errors = true

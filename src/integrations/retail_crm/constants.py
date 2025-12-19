@@ -1,0 +1,1 @@
+OK_STATUS_CODES = (200, 201)
